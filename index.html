@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quant Evolution</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050510;
+    --cyan: #00f5ff;
+    --magenta: #ff00aa;
+    --yellow: #ffe600;
+    --green: #00ff88;
+    --dim: rgba(0,245,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Scanlines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Floating shapes animation */
+  .shapes {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .shape {
+    position: absolute;
+    opacity: 0.12;
+    animation: drift linear infinite;
+  }
+
+  .shape:nth-child(1) { width: 18px; height: 18px; border: 2px solid var(--cyan); left: 10%; animation-duration: 14s; animation-delay: 0s; top: 100%; transform: rotate(45deg); }
+  .shape:nth-child(2) { width: 10px; height: 10px; background: var(--magenta); left: 30%; animation-duration: 18s; animation-delay: -4s; top: 100%; }
+  .shape:nth-child(3) { width: 22px; height: 22px; border: 2px solid var(--yellow); left: 55%; animation-duration: 12s; animation-delay: -8s; top: 100%; transform: rotate(45deg); }
+  .shape:nth-child(4) { width: 8px; height: 8px; background: var(--green); left: 75%; animation-duration: 20s; animation-delay: -2s; top: 100%; }
+  .shape:nth-child(5) { width: 14px; height: 14px; border: 2px solid var(--magenta); left: 88%; animation-duration: 16s; animation-delay: -6s; top: 100%; transform: rotate(45deg); }
+  .shape:nth-child(6) { width: 6px; height: 6px; background: var(--cyan); left: 45%; animation-duration: 22s; animation-delay: -10s; top: 100%; }
+
+  @keyframes drift {
+    from { transform: translateY(0) rotate(0deg); }
+    to { transform: translateY(-110vh) rotate(360deg); }
+  }
+
+  /* Logo / Title */
+  .logo-area {
+    margin-bottom: 48px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    border: 1px solid rgba(0,245,255,0.3);
+    padding: 4px 14px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 900;
+    font-size: clamp(42px, 9vw, 88px);
+    line-height: 1;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .subtitle-line {
+    font-family: 'Exo 2', sans-serif;
+    font-size: clamp(13px, 2.5vw, 18px);
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .tagline {
+    font-size: 15px;
+    color: var(--yellow);
+    letter-spacing: 2px;
+  }
+
+  /* Divider */
+  .divider {
+    width: 100%;
+    max-width: 480px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    margin: 40px 0;
+    animation: fadeIn 1s ease 0.4s both;
+  }
+
+  /* Description */
+  .description {
+    max-width: 600px;
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 48px;
+    animation: fadeIn 1s ease 0.5s both;
+  }
+
+  .description strong {
+    color: var(--cyan);
+    font-weight: normal;
+  }
+
+  /* Features */
+  .features {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 56px;
+    animation: fadeIn 1s ease 0.6s both;
+  }
+
+  .feat {
+    border: 1px solid rgba(0,245,255,0.2);
+    background: var(--dim);
+    padding: 14px 22px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    position: relative;
+  }
+
+  .feat::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 8px; height: 8px;
+    border-top: 2px solid var(--cyan);
+    border-left: 2px solid var(--cyan);
+  }
+
+  .feat::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 8px; height: 8px;
+    border-bottom: 2px solid var(--magenta);
+    border-right: 2px solid var(--magenta);
+  }
+
+  /* CTA Button */
+  .cta-wrap {
+    animation: fadeUp 0.8s ease 0.7s both;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, var(--cyan), var(--green));
+    color: #000;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 18px 40px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 32px rgba(0,245,255,0.35);
+  }
+
+  .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 56px rgba(0,245,255,0.6);
+  }
+
+  .cta svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .cta-sub {
+    margin-top: 14px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 2px;
+  }
+
+  /* Footer */
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 1px;
+  }
+
+  footer a {
+    color: rgba(0,245,255,0.5);
+    text-decoration: none;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shapes">
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+</div>
+
+<div class="container">
+
+  <div class="logo-area">
+    <div class="tag">Android Game</div>
+    <h1><span style="-webkit-text-fill-color:#fff;filter:drop-shadow(0 0 16px rgba(255,255,255,0.3))">QUANT</span><br><span style="-webkit-text-fill-color:var(--cyan);filter:drop-shadow(0 0 24px rgba(0,245,255,0.6))">EVOLUTION</span></h1>
+    <div class="subtitle-line">Tap · Dodge · Evolve</div>
+    <div class="tagline">// reflexes meet mathematics //</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="description">
+    Dodge walls. Catch a quiz box. Use math to power up.<br>
+    <strong>How far can you go?</strong><br><br>
+    An arcade game that rewards both your reflexes and your brain —
+    react fast, answer faster, and evolve beyond the chaos.
+  </p>
+
+  <div class="features">
+    <div class="feat">Fast-paced arcade</div>
+    <div class="feat">Math power-ups</div>
+    <div class="feat">Global leaderboard</div>
+    <div class="feat">Free to play</div>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta" href="https://play.google.com/store/apps/details?id=com.sviatoslav.wallgame&hl=uk" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.65.19.97.07L14.88 12 3.15.17c-.32-.12-.67-.1-.97.07C1.55.63 1.2 1.3 1.2 2v19.99c0 .71.35 1.38.98 1.77zM16.34 13.46l2.7 2.7-8.62 4.84 5.92-7.54zM22.1 10.3c.48.27.77.77.77 1.31 0 .54-.27 1.02-.75 1.3l-2.18 1.22-3.03-3.03 3.03-3.03L22.1 10.3zM10.42 12l-5.92-7.54 8.62 4.84-2.7 2.7z"/></svg>
+      Get it on Google Play
+    </a>
+    <div class="cta-sub">Free · Android · No registration required</div>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2026 Sviatoslav Parashchak &nbsp;·&nbsp;
+  <a href="mailto:sviatoslav.parashchak@gmail.com">sviatoslav.parashchak@gmail.com</a>
+</footer>
+
+</body>
+</html>
